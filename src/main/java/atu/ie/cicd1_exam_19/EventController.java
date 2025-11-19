@@ -48,4 +48,13 @@ public class EventController {
         Event updated=service.update(existing);
         return ResponseEntity.ok(update);
     }
+
+    @DeleteMapping
+    public ResponseEntity<Event>delete(@PathVariable String ticketCode){
+        Optional<Event>maybe=service.findById(ticketCode);
+        if(maybe.isPresent()){
+            service.delete(ticketCode);
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
