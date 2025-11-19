@@ -29,4 +29,23 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping
+    public ResponseEntity <Event>create(@Valid @RequestBody Event e){
+        Event Created =service.create(e);
+        return ResponseEntity.created(URI.create("/api/Event"+Created.getEventId())).body(Created);
+    }
+    @PutMapping{"/{ticketCode}"}
+    public ResponseEntity <Event> updateEvent(@PathVariable String ticketCode, @Valid @RequestBody Event e){
+        Optional<Event>maybe=service.findById(ticketCode);
+        if(maybe.isEmpty()){
+          return ResponseEntity.notFound().build();
+        }
+
+        Event existing =maybe.get();
+        existing.setName(e.getName());
+        existing.setEmail(e.getEmail());
+        Event updated=service.update(existing);
+        return ResponseEntity.ok(update);
+    }
 }
